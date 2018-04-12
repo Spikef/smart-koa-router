@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Router</title>
+    <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+</head>
+<body>
+
+<form method="POST" action="/api/v1/upload" enctype="multipart/form-data">
+    <input type="text" name="text1"><br />
+    <input type="text" name="text2"><br />
+    <input type="file" name="file1"><br />
+    <input type="file" name="file2"><br />
+    <input type="submit">
+</form>
+
+<script>
+    $.post('http://127.0.0.1:8444/article', {
+        title: '新建文章1',
+        content: '文章内容1234'
+    });
+
+    $.ajax({
+        url: 'http://127.0.0.1:8444/article',
+        type: 'POST',
+        data: JSON.stringify({
+            title: '新建文章2',
+            content: '文章内容1234'
+        }),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json'
+    })
+</script>
+</body>
+</html>

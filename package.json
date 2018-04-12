@@ -1,0 +1,37 @@
+{
+  "name": "smart-koa-router",
+  "version": "1.0.2",
+  "description": "All in one router for koa.",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "DEBUG=* node examples/index.js",
+    "test": "mocha test --recursive",
+    "cover": "istanbul cover _mocha --report html -- -R spec"
+  },
+  "author": "Spikef",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Spikef/smart-koa-router.git"
+  },
+  "devDependencies": {
+    "debug": "^3.1.0",
+    "istanbul": "^0.4.5",
+    "koa": "^2.4.1",
+    "koa-router": "^7.3.0",
+    "mocha": "^4.1.0"
+  },
+  "dependencies": {
+    "busboy": "^0.2.14",
+    "ejs": "^2.5.7",
+    "extend2": "^1.0.0",
+    "koa-compose": "^4.0.0",
+    "koa-send": "^4.1.2",
+    "mkdirp": "^0.5.1",
+    "open-args": "^1.0.3",
+    "open-path": "^1.0.6",
+    "path-to-regexp": "^2.1.0",
+    "raw-body": "^2.3.2",
+    "uuid": "^3.1.0"
+  }
+}
