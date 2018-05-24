@@ -1,4 +1,4 @@
-exports.resolveInfo = function(spec) {
+exports.resolveInfo = function resolveInfo(spec) {
     spec.info = Object.assign({}, {
         title: spec.title,
         version: spec.version,
@@ -10,7 +10,7 @@ exports.resolveInfo = function(spec) {
     delete spec.description;
 };
 
-exports.resolveTags = function(spec) {
+exports.resolveTags = function resolveTags(spec) {
     if (spec.tags && !Array.isArray(spec.tags)) {
         var tags = [];
         for (let name in spec.tags) {
@@ -24,7 +24,7 @@ exports.resolveTags = function(spec) {
     }
 };
 
-exports.resolveParameters = function(spec) {
+exports.resolveParameters = function resolveParameters(spec) {
     if (spec.parameters && !Array.isArray(spec.parameters)) {
         var parameters = [];
         Object.keys(spec.parameters).forEach($in => {
@@ -32,6 +32,7 @@ exports.resolveParameters = function(spec) {
                 if (!Object.keys(spec.parameters[$in]).length) return;
                 let param = {
                     name: spec.parameters[$in].__name__ || 'body',
+                    description: spec.parameters[$in].__description__ || '',
                     in: 'body',
                     schema: this.resolveSchema(spec.parameters[$in]),
                     required: spec.parameters[$in].__required__ !== false
@@ -50,23 +51,34 @@ exports.resolveParameters = function(spec) {
     }
 };
 
-exports.resolveSchema = function(params) {
+exports.resolveSchema = function resolveSchema(params) {
+    var param = {};
     if (Array.isArray(params)) {
-        return {
-            type: 'array',
-            items: params
-        }
-    } else {
-        var _params = {};
+        param.type = 'array';
+        param.items = resolveSchema(params[0]);
+    } else if (!params.type) {
+        param.type = 'object';
+        var properties = {};
+        var required = [];
         for (let i in params) {
             if (!(params.hasOwnProperty(i))) continue;
-            if (!/^__.+__$/.test(i)) {
-                _params[i] = params[i];
+            if (/^__(.+)__$/.test(i)) {
+                param[RegExp.$1] = params[i];
+            } else {
+                if (params[i] && params[i].required) {
+                    required.push(i);
+                    delete params[i].required;
+                }
+                if (Array.isArray(params[i]) || !params[i].type) {
+                    params[i] = resolveSchema(params[i]);
+                }
+                properties[i] = params[i];
             }
         }
-        return {
-            type: 'object',
-            properties: _params
-        }
+        param.required = required;
+        param.properties = properties;
+    } else {
+        param = params;
     }
+    return param;
 };

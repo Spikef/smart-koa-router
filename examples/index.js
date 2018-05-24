@@ -92,7 +92,13 @@ router
                 },
                 path: {},
                 body: {},
-                query: {}
+                query: {
+                    sign: {
+                        type: 'string',
+                        description: '签名字段',
+                        required: true
+                    }
+                }
             },
             responses: {
                 "200": {},
@@ -196,6 +202,7 @@ router.post('./article', {
             body: {
                 __name__: 'article',    // 默认为body
                 __required__: true,     // 默认为true
+                __description__: '',    // 默认为空
                 title: {
                     type: 'string',
                     pattern: /^[^\s]{1,100}$/,
