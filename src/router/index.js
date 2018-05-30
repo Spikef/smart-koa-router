@@ -242,7 +242,7 @@ class Router {
         var allowCross = opts.allowCross || (opts.allowCross !== false && this.opts.allowCross);
         if (allowCross) {
             this.options(args[1], args[2], prepares.cors(allowCross));
-            middleware.unshift(prepares.cors(allowCross));
+            this.use(args[0], args[1], args[2], prepares.cors(allowCross));
         }
         if (~args[0].indexOf('GET') && !~args[0].indexOf('HEAD')) {
             this.head(...args.slice(1));
